@@ -3,93 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chgilber <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 14:09:45 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/04 15:59:07 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/04 19:07:39 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include "GNL/get_next_line.h"
-#include "libft/libft.h"
+#include "minishell.h"
 
+int		check(char	*buff)
+{
+	//	printf("%d,%s\n", ft_strlen(buff), buff);
+	if (ft_strlen(buff) == 4 && ft_strncmp(buff, "exit", 4) == 0)
+	{
+		write(1, "exit\n", 5);
+		return (0);
+	}
+	if (ft_strlen(buff) > 4 && ft_strncmp(buff, "exit ", 5) == 0)
+	{
+		write(1, "exit\n", 5);
+		return (end(buff));
+	}
+	else
+		return (1);
+}
 int		main(int ac, char **av)
 {
-	int	i;
-	int len;
-	int lenw;
-	char *pwd;
-	char **dir;
-	char *buff;
+	int		i;
+	char	**dir;
+	char	*buff;
 
-	pwd = getcwd(pwd,0);
-
-	len = strlen(pwd);
-//	printf("%det d{%s}\n", len, pwd);
-//	i = chdir(av[1]);
-	free(pwd);
-	pwd = getcwd(pwd, 40);
-//	printf("%det d{%s}\n", i, pwd + len);
-	write(1, pwd, len);
-	write(1, " -> :", 5);
-	get_next_line(0,&buff);
-	lenw = strlen(pwd);
-	while(strcmp(buff,"ex7") != 0)
+	i = 0;
+	get_dir();
+	get_next_line(0, &buff);
+	while(check(buff) == 1)
 	{
-
-	//write(1, "bonjours", 9);
-//	write(1, pwd, len);
-//	write(1, " -> :", 5);
-	pwd = getcwd(pwd,80);
-	len = strlen(pwd);
-	dir = ft_split(buff, ' ');
-	if(ft_strncmp(dir[0], "cd", 2) == 0)
-	{
-		i = chdir((dir[1]));
-		pwd = getcwd(pwd, 80);
-		lenw = strlen(pwd);
-		len = lenw;
-	}
-//	printf("%s", pwd);
-	else
-		system(buff);
-	write(1, pwd, len);
-	write(1, " -> :", 5);
-//	write(1, "bonjours", 9);
-		pwd = getcwd(pwd, 80);
-//	printf("%s", pwd + len);
-	lenw = strlen(pwd);
-//	write(1, pwd + len , lenw - len);
-	free(buff);
-	get_next_line(0,&buff);
-
+		dir = ft_split(buff, ' ');
+		if(ft_strncmp(dir[0], "cd", 2) == 0)
+			cd(dir);
+		else
+			system(buff);
+		get_dir();
+		free(buff);
+		get_next_line(0,&buff);
 	}
 	free(buff);
-	printf("%s", pwd + len);
-	write(1, (pwd + len), lenw - len);
-	write(1, "lectured", 8);
-//	get_next_line(0,&buff);
-/*	while(strcmp(buff,"exit") != 0)
-	{
-	pwd = getcwd(pwd,80);
-	len = strlen(pwd);
-//	printf("%s", pwd);
-	system(buff);
-	i = chdir(buff + 5);
-	pwd = getcwd(pwd, 80);
-//	printf("%s", pwd + len);
-	lenw = strlen(pwd);
-	write(1, pwd + len , lenw - len);
-	free(buff);
-	get_next_line(0,&buff);
-	write(1, "bonjours", 9);
-	}
-*/
-	return(i);
+	return (0);
 }
