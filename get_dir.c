@@ -6,18 +6,29 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 16:16:26 by jabenjam          #+#    #+#             */
-/*   Updated: 2020/08/04 17:51:44 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/07 16:34:45 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int get_dir()
+int	pwd(char *buff)
 {
-	char *path;
-	int len;
-	int i;
-	int a;
+	char	*path;
+
+	path = NULL;
+	path = getcwd(path, 0);
+	write(1, path, strlen(path));
+	write(1, "\n", 1);
+	return (0);
+}
+
+int	get_dir(void)
+{
+	char	*path;
+	int		len;
+	int		i;
+	int		a;
 
 	path = NULL;
 	path = getcwd(path, 0);

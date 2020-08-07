@@ -3,24 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chgilber <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/16 11:50:11 by chgilber          #+#    #+#              #
-#    Updated: 2020/08/04 19:02:28 by chgilber         ###   ########.fr        #
+#    Updated: 2020/08/06 18:59:13 by chgilber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 SRCS =	ft_atoi.c ft_isascii.c ft_isalpha.c \
-		ft_tolower.c ft_strlcat.c \
+		ft_tolower.c ft_strlcat.c ft_strcmp.c \
 		ft_strnstr.c ft_toupper.c ft_isalnum.c ft_isdigit.c \
 		ft_isprint.c ft_strchr.c  ft_strlcpy.c ft_strncmp.c \
 		ft_strrchr.c ft_memset.c ft_bzero.c ft_memcpy.c \
 		ft_memccpy.c ft_memmove.c ft_memchr.c ft_memcmp.c \
 		ft_strdup.c ft_calloc.c ft_itoa.c ft_substr.c \
 		ft_strtrim.c ft_putchar_fd.c ft_putstr_fd.c ft_lennbr.c \
-		ft_putendl_fd.c ft_putnbr_fd.c ft_strmapi.c ft_split.c 
+		ft_putendl_fd.c ft_putnbr_fd.c ft_strmapi.c ft_split.c
 
 SRCS_BONUS_LIBFT = ft_lstnew_bonus.c ft_lstadd_front_bonus.c \
 ft_lstsize_bonus.c ft_lstlast_bonus.c \
@@ -67,24 +67,21 @@ _IGREY = $'\033[47m
 all : $(NAME)
 
 $(NAME) : $(OBJS_LIBFT)
-	@echo "$(_END)$(_GREEN) [OK]\t"
 	@ar rc $(NAME) $(OBJS_LIBFT)
 	@ranlib $(NAME)
-	@echo "$(_END)$(_GREEN)[Done]"
+	@echo "$(_END)$(_GREEN)[Libft-Done]"
 
 %.o : %.c $(INCLUDES)
-	@echo "$(_END)$(_GREEN) [OK]\t"
+	@echo "$(_END)$(_PURPLE) [OK]\t"
 	@$(CC) $(CFLAGS) -I $(INCLUDES) -o ${<:.c=.o} -c $<
 re : 
 	@make fclean 
 	@make all
 	
 bonus : $(OBJS_LIBFT) $(OBJS_BONUS_LIBFT)
-	@echo "$(_END)$(_YELLOW) [COMPILE WITH BONUS FUNCTION]\t$(_UNDER)$(_GREEN)"
 	@ar rc $(NAME) $(OBJS_LIBFT) $(OBJS_BONUS_LIBFT)
 	@ranlib $(NAME)
-	@echo "$(_UNDER)$(_GREEN) [OK]"
-	@echo "$(_END)$(_YELLOW)[Done]"
+	@echo "$(_END)$(_PURPLE)[Libft-Done]"
 
 
 fclean : clean

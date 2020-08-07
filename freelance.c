@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   freelance.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chgilber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/15 13:33:15 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/06 16:25:57 by jabenjam         ###   ########.fr       */
+/*   Created: 2020/08/06 18:44:32 by chgilber          #+#    #+#             */
+/*   Updated: 2020/08/06 18:48:01 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_lstadd_back(t_list **alst, t_list *new)
+int		freelance(char **dir, char *buff)
 {
-	t_list		*begin;
+	int	i;
 
-	if (!new)
-		return;
-	begin = ft_lstlast(*alst);
-	if (begin)
-		begin->next = new;
-	else
-		*alst = new;
+	i = 0;
+	if (dir)
+	{
+		while (dir[i])
+		{
+			free(dir[i]);
+			i++;
+		}
+		free(dir);
+	}
+	free(buff);
+	return (0);
 }

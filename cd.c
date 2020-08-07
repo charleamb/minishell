@@ -6,23 +6,49 @@
 /*   By: chgilber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 17:17:15 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/04 18:03:07 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/07 17:06:15 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-int		cd(char	**dir)
+int		cdnoarg(int i)
 {
-	int	i;
+	int		a;
+	char	*path;
 
-	i = chdir((dir[1]));
-	if ( i == -1)
+	i = 0;
+	a = 0;
+	path = NULL;
+	path = getcwd(path, 0);
+	while (path[i] && a != 3)
 	{
-		write(1, "bash: cd: ", 10);
-		write(1, dir[1], ft_strlen(dir[1]));
-		write(1, ": No such file or directory\n" , 28);
+		if (path[i] == '/')
+			a++;
+		i++;
 	}
-	return(i);
+	//	printf("(%s)%d{%s}\n" , path,i, ft_substr(path, 0, i - 1));
+	i = chdir(ft_substr(path, 0, i - 1));
+//	i = chdir("$HOME"); a rajouter quand env sera finis
+	return (i);
+}
+
+int		cd(char **dir)
+{
+	int		i;
+
+	i = 0;
+	if (dir[1])
+	{
+		i = chdir((dir[1]));
+		if (i == -1)
+		{
+			write(1, "bash: cd: ", 10);
+			write(1, dir[1], ft_strlen(dir[1]));
+			write(1, ": No such file or directory\n", 28);
+		}
+	}
+	else
+		i = cdnoarg(i);
+	return (i);
 }

@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chgilber <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/16 11:50:11 by chgilber          #+#    #+#              #
-#    Updated: 2020/08/04 19:06:20 by chgilber         ###   ########.fr        #
+#    Updated: 2020/08/07 14:42:24 by jabenjam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = Minishell
 
-SRCS =		get_dir.c end.c cd.c \
+SRCS =		get_dir.c end.c cd.c check.c freelance.c\
+			parse_env.c env_conversion.c\
 			GNL/get_next_line.c GNL/get_next_line_utils.c \
 			main.c
 SRCSLIB =	libft/ft_split.c libft/ft_strlen.c libft/ft_strncmp.c
@@ -63,13 +64,13 @@ bonus : $(NAME_BONUS)
 
 $(NAME) : $(OBJS)
 	@echo "$(_END)$(_GREEN) [OK]\t"
-	@make -C libft
-	@echo "$(_END)$(_GREEN)[Done]"
-	gcc $(CFLAGS) -L libft -lft -o $@ $(OBJS) $(LMINX)
+	@make bonus -C libft
+	@gcc $(CFLAGS) -L libft -lft -o $@ $(OBJS) $(LMINX)
+	@echo "$(_END)$(_GREEN)[Minishell-Done]"
 
 %.o : %.c
 	@echo "$(_END)$(_GREEN) [OK]\t"
-	$(CC) $(CFLAGS) -I $(INCLUDES) -o ${<:.c=.o} -c $<
+	@$(CC) $(CFLAGS) -I $(INCLUDES) -o ${<:.c=.o} -c $<
 
 re : 
 	@make fclean
