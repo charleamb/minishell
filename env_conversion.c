@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 14:31:34 by jabenjam          #+#    #+#             */
-/*   Updated: 2020/08/07 12:47:53 by jabenjam         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:09:40 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int ft_varlen(char *var, int mode)
 
     i = 0;
     j = 0;
-    while (var[i] != '\0' && var[i] != '=')
+    while (var[i] != '\0' && var[i] != '=' && var[i] != '+')
         i++;
     if (mode == 0)
         return (i);
@@ -47,7 +47,7 @@ int	ft_envsize(t_env *lst)
 	return (i);
 }
 
-t_env *new_variable(char *var)
+t_env *new_elem(char *var)
 {
     int i;
     int j;
@@ -58,7 +58,7 @@ t_env *new_variable(char *var)
     elem = malloc(sizeof(t_env));
     if (!(elem->name = malloc(sizeof(char) * ft_varlen(var, 0) + 1)))
         return (NULL);
-    while (var[i] != '\0' && var[i] != '=')
+    while (var[i] != '\0' && var[i] != '=' && var[i] != '+')
     {
         elem->name[i] = var[i];
         i++;
@@ -82,18 +82,13 @@ t_env *ft_tab_to_list(char **tab)
     t_env *current;
 
     i = 0;
-    current = new_variable(tab[i++]);
+    current = new_elem(tab[i++]);
     head = current;
     while (tab[i] != NULL)
     {
-        current->next = new_variable(tab[i++]); // trouver pourquoi l'add_back segfault
+        current->next = new_elem(tab[i++]);
         current = current->next;
     }
-    /*for (int x = 0; head; x++)
-    {
-        printf("elem[%d] NAME=%s VALUE=%s\n", x, head->name, head->value);
-        head = head->next;
-    }*/
     ft_list_to_tab(head);
     return (head);
 }
@@ -136,7 +131,5 @@ char **ft_list_to_tab(t_env *lst)
         current = current->next;
     }
     tab[i] = 0;
-/*    for (int x = 0; tab[x]; x++)
-        printf("tab[%d]=%s\n", x, tab[x]);*/
     return (tab);
 }

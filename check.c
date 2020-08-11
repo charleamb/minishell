@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 14:40:00 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/07 17:06:17 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/09 16:50:51 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		check(char *buff)
 	else
 		return (1);
 }
+
 int		checkquote(char *buff)
 {
 	int	i;
@@ -49,9 +50,13 @@ int		checkquote(char *buff)
 			i++;
 	}
 	if (a % 2 != 0 || u % 2 != 0)
+	{
 		write(1, "No multilines\n", 14);
-	return ((a % 2) + (u % 2));
+		return (1);
+	}
+	return (0);
 }
+
 int		checksquote(char *buff)
 {
 	int	i;
@@ -91,3 +96,4 @@ int		checkdquote(char *buff)
 	}
 	return (a);
 }
+
