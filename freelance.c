@@ -6,7 +6,7 @@
 /*   By: chgilber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 18:44:32 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/09 18:44:11 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/16 17:44:49 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		freelance(char **dir, char *buff)
 		}
 		free(dir);
 	}
-	free(buff);
+	if (buff)
+		free(buff);
 	return (0);
 }

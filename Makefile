@@ -6,21 +6,22 @@
 #    By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/16 11:50:11 by chgilber          #+#    #+#              #
-#    Updated: 2020/08/09 17:53:13 by chgilber         ###   ########.fr        #
+#    Updated: 2020/08/18 18:21:54 by chgilber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Minishell
+NAME = minishell
 
 SRCS =		get_dir.c end.c cd.c check.c freelance.c echo.c\
-			parse_env.c env_conversion.c ft_strjoin.c ft_strncpy.c\
-			GNL/get_next_line.c GNL/get_next_line_utils.c \
-			realloc.c main.c
+			env_conversion.c tab.c env_export.c pipe.c expand.c\
+			env_display.c ft_strjoin.c ft_strncpy.c token.c\
+			GNL/get_next_line.c GNL/get_next_line_utils.c ft_splitmini.c\
+			realloc.c get_execs.c main.c
 SRCSLIB =	libft/ft_split.c libft/ft_strlen.c libft/ft_strncmp.c
 
 INCLUDES = .
 
-LIBFT = ./libft/libft.a
+LIBFT = libft/libft.a
 
 CC = gcc
 
@@ -83,6 +84,5 @@ fclean : clean
 clean :
 	@rm -f $(OBJS) 
 	@make clean -C libft
-
 
 .PHONY : all re fclean clean bonus

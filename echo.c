@@ -6,98 +6,94 @@
 /*   By: chgilber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/07 16:46:22 by chgilber          #+#    #+#             */
-/*   Updated: 2020/08/09 19:12:14 by chgilber         ###   ########.fr       */
+/*   Updated: 2020/08/19 17:18:01 by chgilber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	lenquote(char *buff, char quote)
-{
-	int	i;
-
-	i = 1;
-	while(buff[i] != quote)
-		i++;
-	return (i);
-}
-
-int	join(char **dir, char *buff, int inc, char quote)
+int	join(t_all *all, char *buff, int inc, char quote)
 {
 	int	i;
 
 	i = 0;
 	while (buff[i] != quote)
-			i++;
-	dir[inc] = malloc(sizeof(char) * i + 2);
-	dir[inc] = ft_strncpy(dir[inc], buff, i);
-	//	write(1, dir[inc], 5);
+		i++;
+	all->dir[inc] = malloc(sizeof(char) * i + 2);
+	all->dir[inc] = ft_strncpy(all->dir[inc], buff, i);
+	write(1, all->dir[inc], ft_strlen(all->dir[inc]));
+//	if (all.buff[i + 1] != ' ')
+//		write(1, " ", 1);
 	return (i + 1);
 }
 
-int	echo(char *buff, char **dir)
+int	printnoquote(t_all all)
 {
 	int	i;
-	int	j;
-	int	stop;
 
-	i = ft_strlen(dir[0]);
-	j = 1;
-	if ((checksquote(buff + i) % 2 == 0 && checksquote(buff + i) > 1) ||
-			(checkdquote(buff + i) % 2 == 0 && checkdquote(buff + i) > 1))
+	i = 1;
+	if (all.dir[1])
+		i = (ft_strcmp(all.dir[1], "-n") == 0) ? 2 : 1;
+	while (all.dir[i])
 	{
-		freedir(dir);
-		dir = newdir(&*dir, buff + i);
-	//	i = 0;
-		while (buff[i])
-		{
-			while (buff[i] == ' ')
+		write(1, all.dir[i], ft_strlen(all.dir[i]));
+		write(1, " ", 1);
+		i++;
+	}
+	return (i);
+}
+
+int	printifquote(int i, t_all all)
+{
+	int	j;
+
+	j = 0;
+	while (all.buff[i])
+	{
+		if (all.buff[i] == ' ')
+			while (all.buff[i + 1] == ' ')
 				i++;
-			if (buff[i] == '\'')
-			{
-				i = i + join(&*dir, buff + i + 1, j, '\'');
-				write(1, dir[j], ft_strlen(dir[j]));
-				write(1, " ", 1);
-				j++;
-			}
-			else if (buff[i] == '\"')
-			{
-				i = i + join(&*dir, buff + i + 1, j, '\"');
-				write(1, dir[j], ft_strlen(dir[j]));
-				write(1, " ", 1);
-				j++;
-			}
-			else
-				write(1, &buff[i], 1);
-					i++;
-		}
-	}
-	//stop = j;
-//	j = 1;
-	else //(i == ft_strlen(buff) || checkquote(buff) == 0)
-	{
-		j = 1;
-		i = 7;
-		while (dir[j])
+		if (all.buff[i] == '\'')
 		{
-			write(1, dir[j], ft_strlen(dir[j]));
-			write(1, " ", 1);
-			i = i + ft_strlen(dir[j]);
-	//		free(dir[j]);
+			i = i + join(&all, all.buff + i + 1, j, '\'');
 			j++;
 		}
-		//	write(1, "\n", 1);
-	}
-/*	j = 0;
-	if (dir[j])
-	{
-		while (dir[j])
+		else if (all.buff[i] == '\"')
 		{
-			write(1, dir[j], ft_strlen(dir[j]));
-			write(1, " ", 1);
+			i = i + join(&all, all.buff + i + 1, j, '\"');
 			j++;
 		}
+		else
+			write(1, &all.buff[i], 1);
+		i++;
 	}
-*/	write(1, "\n", 1);
+	return (i);
+}
+
+int	echo(t_all all)
+{
+	int	i;
+
+	all.buff = all.pdir[all.data - all.countpipe];
+	i = ft_strlen(all.dir[0]) + 1;
+	all.stop = 1;
+	if (all.dir[1])
+	{
+		all.stop = (ft_strcmp(all.dir[1], "-n") == 0) ? 0 : 1;
+		if ((checksquote(all.buff + i) % 2 == 0 && checksquote(all.buff + i) >
+					1) || (checkdquote(all.buff + i) % 2 == 0 &&
+						checkdquote(all.buff + i) > 1))
+		{
+			freedir(&*all.dir);
+			all.dir = newdir(&*all.dir, all.buff + i);
+			printifquote(i, all);
+		}
+		else
+			printnoquote(all);
+	}
+	else
+		printnoquote(all);
+	if (all.stop == 1)
+		write(1, "\n", 1);
 	return (0);
 }

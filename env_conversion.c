@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 14:31:34 by jabenjam          #+#    #+#             */
-/*   Updated: 2020/08/08 15:09:40 by jabenjam         ###   ########.fr       */
+/*   Updated: 2020/08/17 12:39:44 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ int ft_varlen(char *var, int mode)
     return (j);
 }
 
-int	ft_envsize(t_env *lst)
+int ft_envsize(t_env *lst)
 {
-	int	i;
+    int i;
 
-	if (!lst)
-		return (0);
-	i = 1;
-	while (lst->next != NULL)
-	{
-		lst = lst->next;
-		i++;
-	}
-	return (i);
+    if (!lst)
+        return (0);
+    i = 0;
+    while (lst != NULL)
+    {
+        lst = lst->next;
+        i++;
+    }
+    return (i);
 }
 
 t_env *new_elem(char *var)
@@ -82,14 +82,17 @@ t_env *ft_tab_to_list(char **tab)
     t_env *current;
 
     i = 0;
-    current = new_elem(tab[i++]);
-    head = current;
-    while (tab[i] != NULL)
+    head = NULL;
+    if (tab)
     {
-        current->next = new_elem(tab[i++]);
-        current = current->next;
+        current = new_elem(tab[i++]);
+        head = current;
+        while (tab[i] != NULL)
+        {
+            current->next = new_elem(tab[i++]);
+            current = current->next;
+        }
     }
-    ft_list_to_tab(head);
     return (head);
 }
 
@@ -122,7 +125,7 @@ char **ft_list_to_tab(t_env *lst)
     t_env *current;
 
     i = 0;
-    if (!(tab = malloc(sizeof(char *) * ft_envsize(lst) + 1)))
+    if (!(tab = malloc(sizeof(char *) * (ft_envsize(lst) + 1))))
         return (NULL);
     current = lst;
     while (current != NULL)
@@ -130,6 +133,6 @@ char **ft_list_to_tab(t_env *lst)
         tab[i++] = ft_data_to_string(current);
         current = current->next;
     }
-    tab[i] = 0;
+    tab[i] = NULL;
     return (tab);
 }
